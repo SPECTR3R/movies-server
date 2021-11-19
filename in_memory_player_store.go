@@ -12,14 +12,15 @@ func (i *InMemoryMovieStore) RecordWin(name string) {
 	i.store[name]++
 }
 
-func (i *InMemoryMovieStore) GetMovieScore(name string) int {
+func (i *InMemoryMovieStore) GetMovieYear(name string) int {
 	return i.store[name]
 }
 
 func (i *InMemoryMovieStore) GetLeague() []Movie {
 	var league []Movie
 	for name, wins := range i.store {
-		league = append(league, Movie{name, wins})
+		id := len(league) + 1
+		league = append(league, Movie{id, name, wins})
 	}
 	return league
 }
