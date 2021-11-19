@@ -17,8 +17,8 @@ type Movie struct {
 
 type MovieStore interface {
 	GetMovieYear(name string) int
-	RecordWin(name string)
-	GetLeague() []Movie
+	RecordMovie(name string)
+	GetMovies() []Movie
 }
 
 type MovieServer struct {
@@ -31,14 +31,14 @@ func NewMovieServer(store MovieStore) *MovieServer {
 	p.store = store
 
 	router := http.NewServeMux()
-	router.Handle("/league", http.HandlerFunc(p.leagueHandler))
+	router.Handle("/movies", http.HandlerFunc(p.moviesHandler))
 	router.Handle("/movie/", http.HandlerFunc(p.movieHandler))
 
 	p.Handler = router
 	return p
 }
 
-func (p *MovieServer) showYear(w http.ResponseWriter, movie string) {
+func (p *MovieServer) getYear(w http.ResponseWriter, movie string) {
 	Year := p.store.GetMovieYear(movie)
 	if Year == 0 {
 		w.WriteHeader(http.StatusNotFound)
@@ -46,22 +46,22 @@ func (p *MovieServer) showYear(w http.ResponseWriter, movie string) {
 	fmt.Fprint(w, p.store.GetMovieYear(movie))
 }
 
-func (p *MovieServer) processWin(w http.ResponseWriter, movie string) {
-	p.store.RecordWin(movie)
+func (p *MovieServer) postMovie(w http.ResponseWriter, movie string) {
+	p.store.RecordMovie(movie)
 	w.WriteHeader(http.StatusAccepted)
 }
 
-func (p *MovieServer) leagueHandler(w http.ResponseWriter, r *http.Request) {
+func (p *MovieServer) moviesHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", jsonContentType)
-	json.NewEncoder(w).Encode(p.store.GetLeague())
+	json.NewEncoder(w).Encode(p.store.GetMovies())
 }
 
 func (p *MovieServer) movieHandler(w http.ResponseWriter, r *http.Request) {
 	movie := strings.TrimPrefix(r.URL.Path, "/movie/")
 	switch r.Method {
 	case http.MethodPost:
-		p.processWin(w, movie)
+		p.postMovie(w, movie)
 	case http.MethodGet:
-		p.showYear(w, movie)
+		p.getYear(w, movie)
 	}
 }

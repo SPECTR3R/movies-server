@@ -23,16 +23,16 @@ func TestRecordingYearAndRetrievingThem(t *testing.T) {
 	// 	assertResponseBody(t, response.Body.String(), "2")
 	// })
 
-	// t.Run("get league", func(t *testing.T) {
+	// t.Run("get movies", func(t *testing.T) {
 	// 	response := httptest.NewRecorder()
-	// 	server.ServeHTTP(response, newLeagueRequest())
+	// 	server.ServeHTTP(response, newMoviesRequest())
 	// 	assertStatus(t, response.Code, http.StatusOK)
 
-	// 	got := getLeagueFromResponse(t, response.Body)
+	// 	got := getMoviesFromResponse(t, response.Body)
 	// 	want := []Movie{
 	// 		{"Pepper", 2},
 	// 		{"Juan", 1},
 	// 	}
-	// 	assertLeague(t, got, want)
+	// 	assertMovies(t, got, want)
 	// })
 }
