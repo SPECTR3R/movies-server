@@ -10,15 +10,15 @@ import (
 	"testing"
 )
 
-type StubMovieStore struct {
+type MockMovieStore struct {
 	movies []Movie
 }
 
-func (s *StubMovieStore) GetMovies() []Movie {
+func (s *MockMovieStore) GetMovies() []Movie {
 	return s.movies
 }
 
-func (s *StubMovieStore) GetMovieYear(name string) int {
+func (s *MockMovieStore) GetMovieYear(name string) int {
 	movies := s.GetMovies()
 	for _, movie := range movies {
 		if movie.Name == name {
@@ -28,7 +28,7 @@ func (s *StubMovieStore) GetMovieYear(name string) int {
 	return 0
 }
 
-func (s *StubMovieStore) RecordMovie(name string) {
+func (s *MockMovieStore) RecordMovie(name string) {
 	// s.winCalls = append(s.winCalls, name)
 }
 
@@ -87,7 +87,7 @@ func TestGETMovieYear(t *testing.T) {
 		{2, "Candyman", 1992},
 	}
 
-	store := StubMovieStore{wantedMovies}
+	store := MockMovieStore{wantedMovies}
 
 	server := NewMovieServer(&store)
 
@@ -122,7 +122,7 @@ func TestGETMovies(t *testing.T) {
 			{3, "Tiest", 14},
 		}
 
-		store := StubMovieStore{wantedMovies}
+		store := MockMovieStore{wantedMovies}
 		server := NewMovieServer(&store)
 
 		request := newMoviesRequest()
@@ -137,7 +137,7 @@ func TestGETMovies(t *testing.T) {
 }
 
 func TestStoreYear(t *testing.T) {
-	store := StubMovieStore{
+	store := MockMovieStore{
 		nil,
 	}
 	server := NewMovieServer(&store)
