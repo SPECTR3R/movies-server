@@ -37,11 +37,6 @@ func newGetYearRequest(name string) *http.Request {
 	return req
 }
 
-func newPostWinRequest(name string) *http.Request {
-	req, _ := http.NewRequest(http.MethodPost, "/movie/", nil)
-	return req
-}
-
 func assertStatus(t testing.TB, got, want int) {
 	t.Helper()
 	if got != want {
@@ -149,11 +144,16 @@ func TestStoreYear(t *testing.T) {
 
 	t.Run("it returns accepted on  POST", func(t *testing.T) {
 		movie := "Pepper"
-		request := newPostWinRequest(movie)
+		request := newPostMovieRequest(movie)
 
 		response := httptest.NewRecorder()
 		server.ServeHTTP(response, request)
 
 		assertStatus(t, response.Code, http.StatusAccepted)
 	})
+}
+
+func newPostMovieRequest(name string) *http.Request {
+	req, _ := http.NewRequest(http.MethodPost, "/movie/", nil)
+	return req
 }
