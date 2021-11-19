@@ -15,7 +15,7 @@ func newGetYearRequest(name string) *http.Request {
 	return req
 }
 
-func newMoviesRequest() *http.Request {
+func newGetMoviesRequest() *http.Request {
 	req, _ := http.NewRequest(http.MethodGet, "/movies", nil)
 	return req
 }
@@ -97,7 +97,7 @@ func TestGETMovies(t *testing.T) {
 		store := MockMovieStore{wantedMovies}
 		server := NewMovieServer(&store)
 
-		request := newMoviesRequest()
+		request := newGetMoviesRequest()
 		response := httptest.NewRecorder()
 
 		server.ServeHTTP(response, request)
@@ -117,7 +117,7 @@ func getMoviesFromResponse(t testing.TB, body io.Reader) (movies []Movie) {
 	return movies
 }
 
-func TestPostYear(t *testing.T) {
+func TestPostMovie(t *testing.T) {
 	store := MockMovieStore{
 		nil,
 	}
